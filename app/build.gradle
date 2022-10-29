@@ -1,0 +1,30 @@
+plugins {
+	id 'org.springframework.boot' version '2.7.5'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id 'java'
+}
+
+group = 'jp.co.xxx'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.jetbrains:annotations:20.1.0'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+//	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+//	runtimeOnly 'org.postgresql:postgresql'
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.mockito:mockito-core:3.6.0'
+	testImplementation 'org.mockito:mockito-junit-jupiter:3.6.0'
+	testImplementation group: 'org.dbunit', name: 'dbunit', version: '2.6.0'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
