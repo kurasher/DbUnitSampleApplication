@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class DbUnitSampleApplicationTests {
 	@Autowired
-	DbUnitController controller;
+	DbUnitController controller;
 
 	@Autowired
 	private MockMvc mvc;
