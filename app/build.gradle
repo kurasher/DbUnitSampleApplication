@@ -13,16 +13,24 @@ repositories {
 }
 
 dependencies {
+	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.13.0'
+	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.0'
+	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.13.0'
+
 	implementation 'org.jetbrains:annotations:20.1.0'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-//	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-//	runtimeOnly 'org.postgresql:postgresql'
+	runtimeOnly 'org.postgresql:postgresql'
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.mockito:mockito-core:3.6.0'
 	testImplementation 'org.mockito:mockito-junit-jupiter:3.6.0'
 	testImplementation group: 'org.dbunit', name: 'dbunit', version: '2.6.0'
+	implementation 'org.projectlombok:lombok:1.18.24'
+	annotationProcessor 'org.projectlombok:lombok:1.18.24'
+	testCompileOnly 'org.projectlombok:lombok:1.18.24'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
 }
 
 tasks.named('test') {
