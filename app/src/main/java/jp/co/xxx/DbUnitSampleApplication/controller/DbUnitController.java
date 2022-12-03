@@ -2,12 +2,13 @@ package jp.co.xxx.DbUnitSampleApplication.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jp.co.xxx.DbUnitSampleApplication.service.DbAccessService;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping(value="/", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class DbUnitController {
   private final DbAccessService dbAccessService;
 
