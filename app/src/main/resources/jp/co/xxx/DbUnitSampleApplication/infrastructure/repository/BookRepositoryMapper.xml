@@ -5,6 +5,6 @@
         SELECT
             *
         FROM
-            Book
+            db_books.Book
     </select>
 </mapper>
