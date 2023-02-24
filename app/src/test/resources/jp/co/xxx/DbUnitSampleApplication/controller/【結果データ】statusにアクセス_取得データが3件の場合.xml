@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-    <book ID="1" TITLE="営繕かるかや怪異譚" AUTHOR="小野不由美"/>
-    <book ID="2" TITLE="営繕かるかや怪異譚 その弐" AUTHOR="小野不由美"/>
-    <book ID="3" TITLE="営繕かるかや怪異譚 その参" AUTHOR="小野不由美"/>
+    <book ID="1" TITLE="営繕かるかや怪異譚" AUTHOR="小野不由美" CREATED="2023-02-25 03:29:21.885122000" UPDATED="2023-02-25 03:29:21.885122000"/>
+    <book ID="2" TITLE="営繕かるかや怪異譚 その弐" AUTHOR="小野不由美" CREATED="2023-02-25 03:29:21.886165000" UPDATED="2023-02-25 03:29:21.886165000"/>
+    <book ID="3" TITLE="営繕かるかや怪異譚 その参" AUTHOR="小野不由美" CREATED="2023-02-25 03:29:21.886613000" UPDATED="2023-02-25 03:29:21.886613000"/>
 </dataset>

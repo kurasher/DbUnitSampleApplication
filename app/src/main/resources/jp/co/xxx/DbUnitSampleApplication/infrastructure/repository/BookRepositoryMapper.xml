@@ -3,7 +3,9 @@
 <mapper namespace="jp.co.xxx.DbUnitSampleApplication.infrastructure.repository.BookRepositoryMapper">
     <select id="getBookData" resultType="jp.co.xxx.DbUnitSampleApplication.entity.Book">
         SELECT
-            *
+            id,
+            title,
+            author
         FROM
             db_books.Book
     </select>
