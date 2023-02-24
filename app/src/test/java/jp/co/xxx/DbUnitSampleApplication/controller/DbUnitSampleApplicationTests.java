@@ -86,11 +86,7 @@ class DbUnitSampleApplicationTests {
   public static void init() throws Exception{
     testConfiguration = new TestConfiguration();
     dataSource = testConfiguration.dataSource();
-    System.out.println("dataSource = " + dataSource);
     iDatabaseConnection = testConfiguration.connection(dataSource);
-//    DatabaseConfig config = iDatabaseConnection.getConfig();
-//    config.setProperty(DatabaseCofing.PROPERTY_DATATYPE_FACTORY, new PostgresqlDataTypeFactory());
-//    config.setProperty(DatabaseCofing.PROPERTY_METADATE_HANDLER, new PostgreMetaDataH());
     targetDataSet = iDatabaseConnection.createDataSet();
   }
 
