@@ -21,4 +21,11 @@ public class DbUnitController {
     String bookListJson = dbAccessService.getBookData();
     return "{\"status\" : \"ok\", \"bookList\" : " + bookListJson + "}";
   }
+
+  @GetMapping("/get_all")
+  public String returnAll() throws JsonProcessingException{
+    String bookListJson = dbAccessService.getBookData();
+
+    return dbAccessService.getBookData();
+  }
 }

@@ -159,4 +159,21 @@ class DbUnitSampleApplicationTests {
 		// assert
 		testAssertion(expectResponse, result, outputXml);
 	}
+
+	@Test
+	@DisplayName("【正常系】get_allにアクセスした時にDBにあるデータを全て返却すること")
+	public void returnGetAllTest() throws Exception {
+		InputStream expectResponse = getClass().getResourceAsStream("【正常系】全取得のURLにアクセスしたときの取得データが1件の場合.json");
+		String inputXml  = "【準備データ】全取得のURLにアクセス_取得データが1件の場合.xml";
+		String outputXml = "【結果データ】全取得のURLにアクセス_取得データが1件の場合.xml";
+		prepareTest(inputXml);
+
+		// execute
+		MvcResult result = mvc.perform(get("/get_all"))
+						.andExpect(status().isOk())
+						.andReturn();
+
+		// assert
+		testAssertion(expectResponse, result, outputXml);
+	}
 }
