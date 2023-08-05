@@ -25,7 +25,7 @@ public class DbUnitController {
   @GetMapping("/get_all")
   public String returnAll() throws JsonProcessingException{
     String bookListJson = dbAccessService.getBookData();
-
-    return dbAccessService.getBookData();
+    
+    return bookListJson;
   }
 }
