@@ -7,6 +7,6 @@
             title,
             author
         FROM
-            db_books.Book
+            books.book
     </select>
 </mapper>

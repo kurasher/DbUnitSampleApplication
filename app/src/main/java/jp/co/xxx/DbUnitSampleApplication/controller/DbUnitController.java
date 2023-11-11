@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import jp.co.xxx.DbUnitSampleApplication.service.DbAccessService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,6 +27,13 @@ public class DbUnitController {
   public String returnAll() throws JsonProcessingException{
     String bookListJson = dbAccessService.getBookData();
     
+    return bookListJson;
+  }
+
+  @PostMapping("/insert_data")
+  public String insertData() throws JsonProcessingException{
+    String bookListJson = dbAccessService.getBookData();
+
     return bookListJson;
   }
 }

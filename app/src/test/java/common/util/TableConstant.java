@@ -4,12 +4,12 @@ public class TableConstant {
   /**
    * DB名の定義
    */
-  public static final String DB = "";
+  public static final String DB = "db_books";
 
   /**
    * スキーマ名の定義
    */
-  public static final String SCHEMA_POSTGRES = "db_books";
+  public static final String SCHEMA_POSTGRES = "books";
 
   /**
    * テーブル名の定義

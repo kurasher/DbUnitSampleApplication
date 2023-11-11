@@ -20,6 +20,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -45,6 +46,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -98,7 +100,7 @@ class DbUnitSampleApplicationTests {
 	@AfterEach
   public void after()throws Exception{
     TestCommonUtil.clearTableRecords(
-            iDatabaseConnection, TableConstant.SCHEMA_POSTGRES, tableList
+            iDatabaseConnection, TableConstant.DB, TableConstant.SCHEMA_POSTGRES, tableList
     );
   }
 
@@ -170,6 +172,24 @@ class DbUnitSampleApplicationTests {
 
 		// execute
 		MvcResult result = mvc.perform(get("/get_all"))
+						.andExpect(status().isOk())
+						.andReturn();
+
+		// assert
+		testAssertion(expectResponse, result, outputXml);
+	}
+
+	@Test
+	@Disabled
+	@DisplayName("【正常系】データを1件挿入して、DBに登録できること。")
+	public void insertDataTest() throws Exception {
+		InputStream expectResponse = getClass().getResourceAsStream("【正常系】全取得のURLにアクセスしたときの取得データが1件の場合.json");
+		String inputXml  = "【準備データ】DBにデータを1件挿入する場合.xml";
+		String outputXml = "【結果データ】DBにデータを1件挿入する場合.xml";
+		prepareTest(inputXml);
+
+		// execute
+		MvcResult result = mvc.perform(post("/insert_data"))
 						.andExpect(status().isOk())
 						.andReturn();
 
