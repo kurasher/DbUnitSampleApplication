@@ -24,4 +24,9 @@ public class DbAccessServiceImpl implements DbAccessService {
 
     return bookListJson;
   }
+
+  @Override
+  public void insertBookData(Book book) {
+
+  }
 }

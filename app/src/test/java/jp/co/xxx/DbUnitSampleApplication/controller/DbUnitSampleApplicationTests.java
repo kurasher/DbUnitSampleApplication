@@ -1,5 +1,6 @@
 package jp.co.xxx.DbUnitSampleApplication.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import common.util.DbUnitUtil;
 import common.util.TableConstant;
@@ -28,6 +29,7 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
@@ -181,17 +183,22 @@ class DbUnitSampleApplicationTests {
 
 	@Test
 	@Disabled
+	// inputbodyをjsonにした場合ってどうするんだっけ？？
 	@DisplayName("【正常系】データを1件挿入して、DBに登録できること。")
 	public void insertDataTest() throws Exception {
+		ObjectMapper mapper= new ObjectMapper();
+		String inputBody = mapper.writeValueAsString(getClass().getResourceAsStream("【正常系】DBにデータを1件挿入する場合.json"));
 		InputStream expectResponse = getClass().getResourceAsStream("【正常系】全取得のURLにアクセスしたときの取得データが1件の場合.json");
 		String inputXml  = "【準備データ】DBにデータを1件挿入する場合.xml";
 		String outputXml = "【結果データ】DBにデータを1件挿入する場合.xml";
 		prepareTest(inputXml);
 
 		// execute
-		MvcResult result = mvc.perform(post("/insert_data"))
-						.andExpect(status().isOk())
-						.andReturn();
+		MvcResult result = mvc.perform(post("/insert_bookdata")
+																	.contentType(MediaType.APPLICATION_JSON)
+																	.content(inputBody))
+												.andExpect(status().isCreated())
+												.andReturn();
 
 		// assert
 		testAssertion(expectResponse, result, outputXml);

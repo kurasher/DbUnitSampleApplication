@@ -9,4 +9,9 @@
         FROM
             books.book
     </select>
+
+    <insert id="insertBookData" parameterType="jp.co.xxx.DbUnitSampleApplication.entity.Book">
+        insert into book (id, title, author)
+        values (#{book.id}, #{book.title}, #{book.author});
+    </insert>
 </mapper>
