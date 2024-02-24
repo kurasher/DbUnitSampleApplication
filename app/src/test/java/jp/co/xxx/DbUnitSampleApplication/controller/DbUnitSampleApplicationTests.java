@@ -24,8 +24,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.Customization;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
+import org.skyscreamer.jsonassert.RegularExpressionValueMatcher;
+import org.skyscreamer.jsonassert.comparator.CustomComparator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -133,7 +136,12 @@ class DbUnitSampleApplicationTests {
 		String responseJson = StreamUtils.copyToString(expectResponse, StandardCharsets.UTF_8);
 		String actual = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
 
-		JSONAssert.assertEquals(responseJson, actual, JSONCompareMode.STRICT);
+		// 日時は正規表現で比較
+		JSONAssert.assertEquals(responseJson, actual,
+						new CustomComparator(JSONCompareMode.STRICT,
+										new Customization("current_time", new RegularExpressionValueMatcher<>())
+						)
+		);
 
 		ReplacementDataSet expectedDataSet = DbUnitUtil.xmlTableLoader(getClass().getResourceAsStream(outputXml));
 		for (String t : tableList){
@@ -150,7 +158,7 @@ class DbUnitSampleApplicationTests {
 	@Test
 	@DisplayName("【正常系】statusにアクセスした時にDBにもアクセスし、jsonでステータスを返すこと")
 	public void returnStatusTest() throws Exception {
-		InputStream expectResponse = getClass().getResourceAsStream("【正常系】ステータスのURLを叩いたときに取得データが3件の場合のレスポンス.json");
+		InputStream expectResponse = getClass().getResourceAsStream("【正常系】ステータスのURLを叩いたときのレスポンス.json");
 		String inputXml  = "【準備データ】statusにアクセス_取得データが3件の場合.xml";
 		String outputXml = "【結果データ】statusにアクセス_取得データが3件の場合.xml";
 		prepareTest(inputXml);

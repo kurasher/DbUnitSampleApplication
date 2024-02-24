@@ -6,6 +6,7 @@ import jp.co.xxx.DbUnitSampleApplication.entity.Book;
 import jp.co.xxx.DbUnitSampleApplication.repository.BookRepository;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -14,6 +15,11 @@ public class DbAccessServiceImpl implements DbAccessService {
 
   public DbAccessServiceImpl(BookRepository bookRepository){
     this.bookRepository = bookRepository;
+  }
+
+  @Override
+  public Timestamp getCurrentTimeStamp() {
+    return bookRepository.getCurrentTimeStamp();
   }
 
   @Override

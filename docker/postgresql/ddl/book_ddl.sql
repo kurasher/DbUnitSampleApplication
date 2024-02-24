@@ -12,7 +12,7 @@ SET search_path = books;
 
 -- テーブルの作成
 create table book (
-  id integer PRIMARY KEY NOT NULL,
+  id serial PRIMARY KEY NOT NULL,
   title varchar(100) NOT NULL,
   author varchar(10) NOT NULL,
   created timestamp  DEFAULT CURRENT_TIMESTAMP NOT NULL,
