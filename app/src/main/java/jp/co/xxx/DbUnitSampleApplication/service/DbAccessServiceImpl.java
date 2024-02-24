@@ -33,6 +33,6 @@ public class DbAccessServiceImpl implements DbAccessService {
 
   @Override
   public void insertBookData(Book book) {
-
+    bookRepository.insertBookData(book);
   }
 }

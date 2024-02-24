@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStream;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -83,5 +84,15 @@ public class DbUnitUtil {
   @Contract("_, _, _ -> new")
   public static @NotNull ITable sortedAndExcludedColumnsTable(ITable iTable, String[] sortColumns, String[] excludeColumns) throws DataSetException {
     return DefaultColumnFilter.excludedColumnsTable(sortTable(iTable, sortColumns), excludeColumns);
+  }
+
+  public static void resetSeqId(IDatabaseConnection conn, String dbName, String schemaName, String tableName, String seqName, int value) throws SQLException {
+    Statement statement = conn.getConnection().createStatement();
+    statement.execute("ALTER SEQUENCE " + dbName + "." + schemaName + "." + tableName + "_" + seqName + "_seq RESTART WITH " + value);
+  }
+
+  public static boolean isColumnNotNull(IDataSet iDataSet, String tableName, String columnName, int index) throws DataSetException {
+    ITable actualTable = iDataSet.getTable(tableName);
+    return null != actualTable.getValue(index, columnName);
   }
 }

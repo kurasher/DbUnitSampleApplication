@@ -9,10 +9,10 @@ public class TableConstant {
   /**
    * スキーマ名の定義
    */
-  public static final String SCHEMA_POSTGRES = "books";
+  public static final String SCHEMA = "books";
 
   /**
    * テーブル名の定義
    */
-  public static final String Book = "book";
+  public static final String BOOK = "book";
 }

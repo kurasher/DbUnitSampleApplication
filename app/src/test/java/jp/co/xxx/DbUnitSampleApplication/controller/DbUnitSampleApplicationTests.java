@@ -6,22 +6,20 @@ import common.util.DbUnitUtil;
 import common.util.TableConstant;
 import common.util.TestCommonUtil;
 import common.util.TestConfiguration;
+import jp.co.xxx.DbUnitSampleApplication.entity.Book;
 import org.dbunit.Assertion;
 import org.dbunit.DatabaseUnitException;
-import org.dbunit.database.DatabaseConfig;
-import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
-import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.ReplacementDataSet;
-import org.dbunit.ext.postgresql.PostgresqlDataTypeFactory;
+import org.intellij.lang.annotations.JdkConstants;
 import org.json.JSONException;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.Customization;
@@ -77,15 +75,23 @@ class DbUnitSampleApplicationTests {
   /**
    * テスト対象のテーブル群
    */
-  private List<String> tableList = Arrays.asList(TableConstant.Book);
+  private List<String> tableList = Arrays.asList(TableConstant.BOOK);
+
+
+	/**
+	 *
+	 * DBUnitで除外後に、チェックが必要なカラム
+	 */
+	private final String CREATED = "created";
+	private final String UPDATED = "updated";
 
   /**
    * DBUnit上で除外するためのフィルター項目
    */
   private String[] excludedFilter =
           new String[]{
-                  "CREATE_DATETIME",
-                  "UPDATE_DATETIME"
+                  "CREATED",
+                  "UPDATED"
           };
 
 
@@ -105,7 +111,7 @@ class DbUnitSampleApplicationTests {
 	@AfterEach
   public void after()throws Exception{
     TestCommonUtil.clearTableRecords(
-            iDatabaseConnection, TableConstant.DB, TableConstant.SCHEMA_POSTGRES, tableList
+            iDatabaseConnection, TableConstant.DB, TableConstant.SCHEMA, tableList
     );
   }
 
@@ -155,12 +161,32 @@ class DbUnitSampleApplicationTests {
 		}
 	}
 
+	/**
+	 *
+	 * @param outputXml
+	 * @throws IOException
+	 * @throws JSONException
+	 * @throws DatabaseUnitException
+	 */
+	private void testAssertion(String outputXml) throws DatabaseUnitException {
+		ReplacementDataSet expectedDataSet = DbUnitUtil.xmlTableLoader(getClass().getResourceAsStream(outputXml));
+		for (String t : tableList){
+			ITable actualTable = targetDataSet.getTable(t);
+			ITable expectedTable = expectedDataSet.getTable(t);
+
+			ITable filteredActualTable = DbUnitUtil.excludeFilterTable(actualTable, excludedFilter);
+			ITable filteredExpectedTable = DbUnitUtil.excludeFilterTable(expectedTable, excludedFilter);
+
+			Assertion.assertEquals(filteredExpectedTable, filteredActualTable);
+		}
+	}
+
 	@Test
 	@DisplayName("【正常系】statusにアクセスした時にDBにもアクセスし、jsonでステータスを返すこと")
 	public void returnStatusTest() throws Exception {
 		InputStream expectResponse = getClass().getResourceAsStream("【正常系】ステータスのURLを叩いたときのレスポンス.json");
-		String inputXml  = "【準備データ】statusにアクセス_取得データが3件の場合.xml";
-		String outputXml = "【結果データ】statusにアクセス_取得データが3件の場合.xml";
+		String inputXml  = "【準備データ】statusにアクセス.xml";
+		String outputXml = "【結果データ】statusにアクセス.xml";
 		prepareTest(inputXml);
 
 		// execute
@@ -190,25 +216,32 @@ class DbUnitSampleApplicationTests {
 	}
 
 	@Test
-	@Disabled
-	// inputbodyをjsonにした場合ってどうするんだっけ？？
 	@DisplayName("【正常系】データを1件挿入して、DBに登録できること。")
 	public void insertDataTest() throws Exception {
+		Book testData = new Book();
+		testData.setTitle("ゴーストハント");
+		testData.setAuthor("小野不由美");
+
 		ObjectMapper mapper= new ObjectMapper();
-		String inputBody = mapper.writeValueAsString(getClass().getResourceAsStream("【正常系】DBにデータを1件挿入する場合.json"));
-		InputStream expectResponse = getClass().getResourceAsStream("【正常系】全取得のURLにアクセスしたときの取得データが1件の場合.json");
+		// Sequenceのリセット
+		DbUnitUtil.resetSeqId(iDatabaseConnection, TableConstant.DB, TableConstant.SCHEMA, TableConstant.BOOK, "id", 2);
 		String inputXml  = "【準備データ】DBにデータを1件挿入する場合.xml";
 		String outputXml = "【結果データ】DBにデータを1件挿入する場合.xml";
 		prepareTest(inputXml);
 
 		// execute
 		MvcResult result = mvc.perform(post("/insert_bookdata")
-																	.contentType(MediaType.APPLICATION_JSON)
-																	.content(inputBody))
-												.andExpect(status().isCreated())
-												.andReturn();
+																.contentType(MediaType.APPLICATION_JSON)
+																.content(mapper.writeValueAsString(testData)))
+											.andExpect(status().isOk())
+											.andReturn();
 
 		// assert
-		testAssertion(expectResponse, result, outputXml);
+		testAssertion(outputXml);
+
+		// 追加されたデータのcreatedとupdatedカラムの中身がnullではないことの確認
+		Assertions.assertTrue(DbUnitUtil.isColumnNotNull(targetDataSet, TableConstant.BOOK, CREATED, 1));
+		Assertions.assertTrue(DbUnitUtil.isColumnNotNull(targetDataSet, TableConstant.BOOK, UPDATED, 1));
+
 	}
 }

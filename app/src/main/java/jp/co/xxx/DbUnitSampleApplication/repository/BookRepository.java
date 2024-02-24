@@ -6,7 +6,8 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public interface BookRepository {
+  Timestamp getCurrentTimeStamp();
   List<Book> getBookData();
 
-  Timestamp getCurrentTimeStamp();
+  void insertBookData(Book book);
 }

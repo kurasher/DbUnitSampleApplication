@@ -15,7 +15,7 @@
     </select>
 
     <insert id="insertBookData" parameterType="jp.co.xxx.DbUnitSampleApplication.entity.Book">
-        INSERT INTO book (title, author)
-        VALUES ( #{book.title}, #{book.author});
+        INSERT INTO books.book (title, author)
+        VALUES ( #{title}, #{author});
     </insert>
 </mapper>

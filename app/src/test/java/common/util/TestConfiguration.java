@@ -36,7 +36,7 @@ public class TestConfiguration {
   }
 
   public IDatabaseConnection connection(DataSource dataSource) throws SQLException, DatabaseUnitException {
-    return new CustomDatabaseConnection(dataSource.getConnection(), TableConstant.SCHEMA_POSTGRES);
+    return new CustomDatabaseConnection(dataSource.getConnection(), TableConstant.SCHEMA);
   }
 
   public class CustomDatabaseConnection extends DatabaseConnection{
