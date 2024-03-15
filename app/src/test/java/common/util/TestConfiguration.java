@@ -17,14 +17,6 @@ public class TestConfiguration {
   private static final String PASSWORD = "passw0rd";
 
   public DataSource dataSource(){
-    // MySQLとかではいけるが、PostgreSQLは厳しい？
-//    DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
-//    dataSourceBuilder.driverClassName(DRIVER_CLASS_NAME);
-//    dataSourceBuilder.url(DB_URL);
-//    dataSourceBuilder.username(USERNAME);
-//    dataSourceBuilder.username(PASSWORD);
-//    return dataSourceBuilder.build();
-
     return new TransactionAwareDataSourceProxy(
             DataSourceBuilder
                     .create()
