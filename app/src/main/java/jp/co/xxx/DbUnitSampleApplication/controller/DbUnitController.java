@@ -4,8 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import jp.co.xxx.DbUnitSampleApplication.entity.Book;
 import jp.co.xxx.DbUnitSampleApplication.service.DbAccessService;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,8 +44,13 @@ public class DbUnitController {
     dbAccessService.insertBookData(book);
   }
 
-  @PostMapping("/update_bookdata")
+  @PutMapping("/update_bookdata")
   public void updateData(@RequestBody Book book){
     dbAccessService.updateBookData(book);
+  }
+
+  @DeleteMapping("/delete_bookdata/{id}")
+  public void deleteData(@PathVariable int id){
+    dbAccessService.deleteBookData(id);
   }
 }

@@ -40,4 +40,8 @@ public class DbAccessServiceImpl implements DbAccessService {
   public void updateBookData(Book book){
     bookRepository.updateBookData(book);
   }
+
+  public void deleteBookData(int id){
+    bookRepository.deleteBookData(id);
+  }
 }

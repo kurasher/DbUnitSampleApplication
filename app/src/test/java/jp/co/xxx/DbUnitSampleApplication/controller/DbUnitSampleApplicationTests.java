@@ -20,6 +20,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.Customization;
@@ -48,8 +49,10 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -255,12 +258,40 @@ class DbUnitSampleApplicationTests {
 		ObjectMapper mapper= new ObjectMapper();
 		// Sequenceのリセット
 		DbUnitUtil.resetSeqId(iDatabaseConnection, TableConstant.DB, TableConstant.SCHEMA, TableConstant.BOOK, "id", 2);
-		String inputXml  = "【準備データ】DBにデータを1件更新する場合.xml";
-		String outputXml = "【結果データ】DBにデータを1件更新する場合.xml";
+		String inputXml  = "【準備データ】DBのデータを1件更新する場合.xml";
+		String outputXml = "【結果データ】DBのデータを1件更新する場合.xml";
 		prepareTest(inputXml);
 
 		// execute
-		MvcResult result = mvc.perform(post("/update_bookdata")
+		MvcResult result = mvc.perform(put("/update_bookdata")
+										.contentType(MediaType.APPLICATION_JSON)
+										.content(mapper.writeValueAsString(testData)))
+						.andExpect(status().isOk())
+						.andReturn();
+
+		// assert
+		testAssertion(outputXml);
+
+		// 追加されたデータのcreatedとupdatedカラムの中身がnullではないことの確認
+		Assertions.assertTrue(DbUnitUtil.isColumnNotNull(targetDataSet, TableConstant.BOOK, CREATED, 0));
+		Assertions.assertTrue(DbUnitUtil.isColumnNotNull(targetDataSet, TableConstant.BOOK, UPDATED, 0));
+	}
+
+	@Test
+	@DisplayName("【正常系】データを1件削除して、データを削除できること。")
+	public void deleteDataTest() throws Exception {
+		Book testData = new Book();
+		testData.setId(1);
+
+		ObjectMapper mapper= new ObjectMapper();
+		// Sequenceのリセット
+		DbUnitUtil.resetSeqId(iDatabaseConnection, TableConstant.DB, TableConstant.SCHEMA, TableConstant.BOOK, "id", 2);
+		String inputXml  = "【準備データ】DBのデータを1件削除する場合.xml";
+		String outputXml = "【結果データ】DBのデータを1件削除する場合.xml";
+		prepareTest(inputXml);
+
+		// execute
+		MvcResult result = mvc.perform(delete("/delete_bookdata/1")
 										.contentType(MediaType.APPLICATION_JSON)
 										.content(mapper.writeValueAsString(testData)))
 						.andExpect(status().isOk())

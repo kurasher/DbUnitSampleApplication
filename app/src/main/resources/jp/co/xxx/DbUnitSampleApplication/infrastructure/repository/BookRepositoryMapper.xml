@@ -31,4 +31,11 @@
         WHERE
            id = #{id} ;
     </update>
+
+    <delete id="deleteBookData" parameterType="int">
+        DELETE FROM
+            books.book
+        WHERE
+            id = #{id} ;
+    </delete>
 </mapper>

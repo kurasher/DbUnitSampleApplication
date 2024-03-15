@@ -13,4 +13,6 @@ public interface DbAccessService {
   void insertBookData(Book book);
 
   void updateBookData(Book book);
+
+  void deleteBookData(int id);
 }
