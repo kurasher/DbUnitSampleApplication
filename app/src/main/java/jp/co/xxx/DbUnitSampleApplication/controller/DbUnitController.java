@@ -25,6 +25,12 @@ public class DbUnitController {
     this.dbAccessService = dbAccessService;
   }
 
+  /**
+   * DBまでつながるかを確認(HealthCheck的な立ち位置)
+   * Postmanから叩くときはGETにすること。
+   * @return
+   * @throws JsonProcessingException
+   */
   @GetMapping("/status")
   public String returnStatus() throws JsonProcessingException {
     Timestamp today = dbAccessService.getCurrentTimeStamp();
@@ -32,6 +38,12 @@ public class DbUnitController {
     return "{\"status\" : \"ok\", " + "\"current_time\" : \"" + sdf.format(today) + "\"}";
   }
 
+  /**
+   * DBの全てのデータを取得
+   * Postmanから叩くときはGETにすること。
+   * @return
+   * @throws JsonProcessingException
+   */
   @GetMapping("/get_all")
   public String returnAll() throws JsonProcessingException{
     String bookListJson = dbAccessService.getBookData();
@@ -39,16 +51,41 @@ public class DbUnitController {
     return bookListJson;
   }
 
+  /**
+   * データのインサート
+   * Postmanから叩くときはPostにして下記のようなBodyをつけること。
+   * {
+   *     "title": "title",
+   *     "author": "author"
+   * }
+   * @param book
+   * @throws JsonProcessingException
+   */
   @PostMapping("/insert_bookdata")
   public void insertData(@RequestBody Book book) throws JsonProcessingException{
     dbAccessService.insertBookData(book);
   }
 
+  /**
+   * データの更新
+   * Postmanから叩くときはPUTにして、下記のようなBodyをつけること。
+   * {
+   *     "id": "3",
+   *     "title": "title",
+   *     "author": "author"
+   * }
+   * @param book
+   */
   @PutMapping("/update_bookdata")
   public void updateData(@RequestBody Book book){
     dbAccessService.updateBookData(book);
   }
 
+  /**
+   * 指定したidのデータ行を削除
+   * Postmanから叩くときはDELETEを選ぶこと。
+   * @param id
+   */
   @DeleteMapping("/delete_bookdata/{id}")
   public void deleteData(@PathVariable int id){
     dbAccessService.deleteBookData(id);
