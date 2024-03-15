@@ -35,4 +35,9 @@ public class DbAccessServiceImpl implements DbAccessService {
   public void insertBookData(Book book) {
     bookRepository.insertBookData(book);
   }
+
+  @Override
+  public void updateBookData(Book book){
+    bookRepository.updateBookData(book);
+  }
 }

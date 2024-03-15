@@ -11,4 +11,6 @@ public interface DbAccessService {
   String getBookData() throws JsonProcessingException;
 
   void insertBookData(Book book);
+
+  void updateBookData(Book book);
 }

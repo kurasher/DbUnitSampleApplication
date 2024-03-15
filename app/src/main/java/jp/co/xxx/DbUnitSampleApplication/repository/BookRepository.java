@@ -10,4 +10,6 @@ public interface BookRepository {
   List<Book> getBookData();
 
   void insertBookData(Book book);
+
+  void updateBookData(Book book);
 }

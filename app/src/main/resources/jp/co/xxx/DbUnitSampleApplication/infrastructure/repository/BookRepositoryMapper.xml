@@ -15,7 +15,20 @@
     </select>
 
     <insert id="insertBookData" parameterType="jp.co.xxx.DbUnitSampleApplication.entity.Book">
-        INSERT INTO books.book (title, author)
-        VALUES ( #{title}, #{author});
+        INSERT INTO
+            books.book (title, author)
+        VALUES
+            ( #{title}, #{author});
     </insert>
+
+    <update id="updateBookData" parameterType="jp.co.xxx.DbUnitSampleApplication.entity.Book">
+        UPDATE
+            books.book
+        SET
+           title = #{title}
+            , author = #{author}
+            , updated = current_timestamp
+        WHERE
+           id = #{id} ;
+    </update>
 </mapper>

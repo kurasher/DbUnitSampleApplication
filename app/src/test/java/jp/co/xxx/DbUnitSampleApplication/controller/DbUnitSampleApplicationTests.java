@@ -242,6 +242,35 @@ class DbUnitSampleApplicationTests {
 		// 追加されたデータのcreatedとupdatedカラムの中身がnullではないことの確認
 		Assertions.assertTrue(DbUnitUtil.isColumnNotNull(targetDataSet, TableConstant.BOOK, CREATED, 1));
 		Assertions.assertTrue(DbUnitUtil.isColumnNotNull(targetDataSet, TableConstant.BOOK, UPDATED, 1));
+	}
 
+	@Test
+	@DisplayName("【正常系】データを1件更新して、データを更新できること。")
+	public void updateDataTest() throws Exception {
+		Book testData = new Book();
+		testData.setId(1);
+		testData.setTitle("容疑者Xの献身");
+		testData.setAuthor("東野圭吾");
+
+		ObjectMapper mapper= new ObjectMapper();
+		// Sequenceのリセット
+		DbUnitUtil.resetSeqId(iDatabaseConnection, TableConstant.DB, TableConstant.SCHEMA, TableConstant.BOOK, "id", 2);
+		String inputXml  = "【準備データ】DBにデータを1件更新する場合.xml";
+		String outputXml = "【結果データ】DBにデータを1件更新する場合.xml";
+		prepareTest(inputXml);
+
+		// execute
+		MvcResult result = mvc.perform(post("/update_bookdata")
+										.contentType(MediaType.APPLICATION_JSON)
+										.content(mapper.writeValueAsString(testData)))
+						.andExpect(status().isOk())
+						.andReturn();
+
+		// assert
+		testAssertion(outputXml);
+
+		// 追加されたデータのcreatedとupdatedカラムの中身がnullではないことの確認
+		Assertions.assertTrue(DbUnitUtil.isColumnNotNull(targetDataSet, TableConstant.BOOK, CREATED, 0));
+		Assertions.assertTrue(DbUnitUtil.isColumnNotNull(targetDataSet, TableConstant.BOOK, UPDATED, 0));
 	}
 }

@@ -40,4 +40,9 @@ public class DbUnitController {
   public void insertData(@RequestBody Book book) throws JsonProcessingException{
     dbAccessService.insertBookData(book);
   }
+
+  @PostMapping("/update_bookdata")
+  public void updateData(@RequestBody Book book){
+    dbAccessService.updateBookData(book);
+  }
 }
