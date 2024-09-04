@@ -15,6 +15,8 @@
 $ docker exec -it postgresql_container /bin/bash
  
 psql -U postgres
+\c db_books;
+SET search_path = books;
 select * from book;
 
 # コンテナのpostgresqlから出る場合
